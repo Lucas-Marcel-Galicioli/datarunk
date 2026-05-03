@@ -40,7 +40,7 @@ A FinSecure Pagamentos necessita melhorar seu sistema de antifraude para:
 
 ### Fonte
 
-Dois datasets sintéticos fornecidos pela DataRunk simulando o ambiente operacional de uma fintech.
+Datasets sintéticos fornecidos pela DataRunk simulando o ambiente operacional de uma fintech.
 
 ### Datasets
 
@@ -50,6 +50,9 @@ Dois datasets sintéticos fornecidos pela DataRunk simulando o ambiente operacio
 
 **customers.csv** (~800 linhas)
 - Colunas principais: customer_id, age, credit_limit, avg_monthly_spend, risk_score, region, account_tier, is_active
+
+**alerts.csv**
+- Alertas históricos do sistema legado
 
 **Particularidades dos dados:**
 - Desbalanceamento acentuado de classes (fraude: ~3%)
@@ -68,8 +71,8 @@ Dois datasets sintéticos fornecidos pela DataRunk simulando o ambiente operacio
 
 1. Clone o repositório:
 ```bash
-git clone <seu-repositorio-url>
-cd datarunk-fraud-detection
+git clone https://github.com/Lucas-Marcel-Galicioli/datarunk.git
+cd datarunk
 ```
 
 2. Crie um ambiente virtual:
@@ -83,9 +86,31 @@ source venv/bin/activate  # No Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+### Preparando os Dados
+
+Os datasets foram fornecidos pela DataRunk no desafio técnico e não estão versionados no repositório (por questões de tamanho e reprodutibilidade). Para executar o projeto:
+
+1. Obtenha os arquivos CSV do desafio DataRunk:
+   - `transactions.csv`
+   - `customers.csv`
+   - `alerts.csv`
+
+2. Coloque-os no diretório `data/raw/`:
+```bash
+# Estrutura esperada após adicionar os dados
+datarunk/
+└── data/
+    └── raw/
+        ├── transactions.csv
+        ├── customers.csv
+        └── alerts.csv
+```
+
+3. Os notebooks carregarão automaticamente os dados desse local
+
 ## Execução
 
-Os notebooks devem ser executados sequencialmente:
+Os notebooks devem ser executados sequencialmente na seguinte ordem:
 
 ### 1. EDA e Engenharia de Features
 ```bash
@@ -93,12 +118,13 @@ jupyter notebook notebooks/01_eda_features.ipynb
 ```
 
 Inclui:
-- Análise de distribuição da variável alvo
+- Análise de distribuição da variável alvo (fraude vs. legítima)
 - Identificação e tratamento de nulos, outliers e inconsistências
-- Criação de ao menos 3 features derivadas:
-  - Feature temporal (hora do dia / indicador noturno)
-  - Feature de anomalia (ausência de device_fingerprint)
-  - Feature comportamental (desvio de transação vs. avg_monthly_spend)
+- Análise de ao menos 2 relações bivariadas com a variável alvo
+- Criação de 3 features derivadas:
+  - Feature temporal: hora do dia e indicador de janela noturna (00h-05h)
+  - Feature de anomalia: indicador de device_fingerprint ausente
+  - Feature comportamental: desvio da transação vs. avg_monthly_spend do cliente
 
 ### 2. Modelo Baseline
 ```bash
@@ -106,10 +132,11 @@ jupyter notebook notebooks/02_baseline.ipynb
 ```
 
 Inclui:
-- Baseline com Regressão Logística ou sistema legado (is_flagged)
-- Estratégia de particionamento (justificada)
-- Tratamento de desbalanceamento de classes
+- Escolha de baseline: Regressão Logística ou sistema legado (is_flagged)
+- Estratégia de particionamento justificada
+- Tratamento de desbalanceamento de classes documentado
 - Métricas obrigatórias: Precision, Recall, F1-Score, ROC-AUC, Matriz de Confusão
+- Explicação clara sobre por que Accuracy é inadequada para detecção de fraude
 
 ### 3. Modelo Final
 ```bash
@@ -117,10 +144,11 @@ jupyter notebook notebooks/03_model_pipeline.ipynb
 ```
 
 Inclui:
-- Comparação de ao menos 2 algoritmos
-- Pipeline reproduzível com sklearn Pipeline
-- Avaliação completa com curva Precision-Recall
-- Feature importance com conexão ao contexto de negócio
+- Comparação de ao menos 2 algoritmos (ex: Random Forest vs. XGBoost)
+- Pipeline reproduzível com sklearn Pipeline ou equivalente
+- Avaliação completa com mesmas métricas do baseline + Curva Precision-Recall
+- Threshold escolhido e justificado operacionalmente
+- Feature importance conectada ao contexto de negócio
 
 ## Métricas e Avaliação
 
@@ -136,9 +164,9 @@ Com uma taxa de fraude de aproximadamente 3%, um modelo trivial que classifica t
 
 ### Trade-off de Threshold
 
-A escolha do ponto de corte afeta diretamente:
-- **Threshold alto**: Maior precision (menos falsos positivos), menor recall (perde fraudes)
-- **Threshold baixo**: Maior recall (detecta mais fraudes), menor precision (mais clientes legítimos bloqueados)
+A escolha do ponto de corte afeta diretamente o negócio:
+- **Threshold alto**: Maior precision (menos clientes bloqueados), menor recall (fraudes escapam)
+- **Threshold baixo**: Maior recall (captura mais fraudes), menor precision (mais legítimos bloqueados)
 
 A recomendação leva em conta o custo operacional de cada tipo de erro no contexto de negócio.
 
@@ -151,18 +179,18 @@ A recomendação leva em conta o custo operacional de cada tipo de erro no conte
 ## Análise de Negócio
 
 O projeto inclui análise traduzindo os resultados em:
-- Comparativo quantitativo (baseline vs. modelo final)
+- Comparativo quantitativo baseline vs. modelo final
 - Impacto financeiro estimado (economia mensal potencial)
 - Trade-off de threshold com justificativa operacional
 - Limitações do modelo e tipos de fraude que podem não ser capturados
 
-## Tecnologias
+## Tecnologias Utilizadas
 
 - **Python 3.8+**
-- **scikit-learn**: Preprocessing e modelos base
-- **XGBoost / LightGBM**: Modelos avançados
-- **imbalanced-learn**: Tratamento de desbalanceamento
-- **pandas / numpy**: Manipulação de dados
+- **scikit-learn**: Preprocessing e modelos de baseline
+- **XGBoost / LightGBM**: Modelos avançados para comparação
+- **imbalanced-learn**: Tratamento de desbalanceamento de classes
+- **pandas / numpy**: Manipulação e análise de dados
 - **matplotlib / seaborn**: Visualizações
 
 ## Reprodutibilidade
@@ -170,10 +198,10 @@ O projeto inclui análise traduzindo os resultados em:
 O projeto garante reprodutibilidade através de:
 - Random seed fixado em todos os modelos
 - Pipeline encapsulado com sklearn Pipeline
-- requirements.txt com versões específicas
-- Documentação clara de decisões em cada notebook
+- requirements.txt com versões específicas de dependências
+- Documentação clara de decisões e trade-offs em cada notebook
 
-## Contato e Questões
+## Contato e Dúvidas
 
 Para dúvidas sobre o projeto, enviar ao recrutador DataRunk com assunto: `[DÚVIDA TESTE DS 5H] Seu Nome`
 
