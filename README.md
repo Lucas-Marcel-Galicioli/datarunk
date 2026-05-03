@@ -183,7 +183,7 @@ A recomendação leva em conta o custo operacional de cada tipo de erro no conte
 
 Os resultados foram traduzidos em linguagem de negócio e estão disponíveis em:
 
-[docs/E4_business_analysis/04_business_analysis.docx](docs/E4_business_analysis/04_business_analysis.docx)
+[docs/E4_business_analysis/04_business_analysis.pdf](docs/E4_business_analysis/04_business_analysis.pdf)
 
 O documento cobre:
 - Comparativo quantitativo baseline vs. modelo final
@@ -208,6 +208,12 @@ O projeto garante reprodutibilidade através de:
 - Pipeline encapsulado com sklearn Pipeline
 - requirements.txt com versões específicas de dependências
 - Documentação clara de decisões e trade-offs em cada notebook
+
+## CI/CD
+
+O pipeline de CI/CD está esboçado em `.github/workflows/ci_cd_pipeline.yaml`
+com os stages planejados para um ambiente de produção (lint, testes, validação
+de dados, treinamento, MLflow registry e deploy).
 
 ## Contato e Dúvidas
 
