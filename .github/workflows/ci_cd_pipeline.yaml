@@ -1,0 +1,13 @@
+# ============================================
+# DataRunk — CI/CD Pipeline
+# ============================================
+# TODO: Implementar pipeline de CI/CD
+#
+# Sugestão de stages:
+#   1. Lint & Format (black, flake8, isort)
+#   2. Unit Tests (pytest)
+#   3. Data Validation (great expectations)
+#   4. Model Training & Evaluation
+#   5. Model Registry (MLflow)
+#   6. Deploy (staging → production)
+# ============================================

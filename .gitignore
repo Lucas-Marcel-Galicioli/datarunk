@@ -1,0 +1,75 @@
+# ============================================
+# DataRunk — Fraud Detection .gitignore
+# ============================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+eggs/
+*.whl
+
+# --- Virtual Environments ---
+.venv/
+venv/
+ENV/
+env/
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# --- Data Files (CSV, Parquet, etc.) ---
+data/raw/*.csv
+data/raw/*.parquet
+data/processed/*.csv
+data/processed/*.parquet
+data/raw/*.json
+data/processed/*.json
+*.h5
+*.hdf5
+
+# --- Model Artifacts ---
+*.pkl
+*.joblib
+*.onnx
+models/*.pt
+models/*.pth
+
+# --- MLflow ---
+mlruns/
+mlartifacts/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Environment Variables ---
+.env
+.env.local
+.env.production
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Coverage ---
+.coverage
+htmlcov/
+.pytest_cache/
+
+# --- Distribution ---
+*.tar.gz
+*.zip

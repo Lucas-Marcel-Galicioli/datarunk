@@ -1,0 +1,30 @@
+# ============================================
+# MLflow Configuration — Fraud Detection
+# ============================================
+
+# Tracking Server
+tracking_uri: "mlruns"  # Local tracking (alterar para URI remota em produção)
+
+# Experiment Settings
+experiment_name: "fraud-detection"
+artifact_location: "mlartifacts"
+
+# Model Registry
+registered_model_name: "fraud-detector"
+
+# Logging Settings
+log_params: true
+log_metrics: true
+log_artifacts: true
+log_model: true
+
+# Autolog
+autolog:
+  enabled: true
+  log_input_examples: true
+  log_model_signatures: true
+
+# Tags
+default_tags:
+  project: "datarunk-fraud-detection"
+  team: "ml-engineering"
