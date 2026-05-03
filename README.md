@@ -31,6 +31,9 @@ A FinSecure Pagamentos necessita melhorar seu sistema de antifraude para:
 │   ├── preprocessing.py               # Transformações de dados
 │   ├── models.py                      # Definição de modelos
 │   └── utils.py                       # Funções auxiliares
+├── docs/
+│   └── E4_business_analysis/
+│       └── 04_business_analysis.docx  # Análise de negócio para cliente final
 ├── requirements.txt                   # Dependências Python
 ├── .gitignore
 └── README.md
@@ -178,11 +181,16 @@ A recomendação leva em conta o custo operacional de cada tipo de erro no conte
 
 ## Análise de Negócio
 
-O projeto inclui análise traduzindo os resultados em:
+Os resultados foram traduzidos em linguagem de negócio e estão disponíveis em:
+
+[docs/E4_business_analysis/04_business_analysis.docx](docs/E4_business_analysis/04_business_analysis.docx)
+
+O documento cobre:
 - Comparativo quantitativo baseline vs. modelo final
-- Impacto financeiro estimado (economia mensal potencial)
+- Impacto financeiro estimado (economia mensal potencial de R$ 242.000)
 - Trade-off de threshold com justificativa operacional
-- Limitações do modelo e tipos de fraude que podem não ser capturados
+- Riscos conhecidos do modelo e estratégias de mitigação
+- Próximos passos recomendados para implantação
 
 ## Tecnologias Utilizadas
 
